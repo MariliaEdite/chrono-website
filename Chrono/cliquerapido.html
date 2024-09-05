@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clique Rápido - Chrono</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilos principais */
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .minijogo-header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #cdb34a;
+        }
+
+        .info-jogo {
+            text-align: center;
+            margin-bottom: 30px;
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .info-jogo p {
+            font-size: 18px;
+        }
+
+        .botao-jogar, .botao-voltar {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #000;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .botao-jogar:hover, .botao-voltar:hover {
+            background-color: #555;
+        }
+
+        .resultado {
+            font-size: 18px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .botao-clique {
+            display: block;
+            margin: 20px auto;
+            padding: 20px;
+            font-size: 24px;
+            background-color: #ffd700;
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .cronometro {
+            font-size: 32px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Estilo para o menu */
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            background-color: #000;
+            display: flex;
+            justify-content: left;
+            align-items: center;
+            height: 50px;
+        }
+
+        nav ul li {
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 15px;
+        }
+
+        nav ul li a:hover {
+            background-color: #555;
+        }
+
+        /* Estilo para o nome do site */
+        .site-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #cdb34a;
+            margin-right: auto;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Menu padrão com o nome do site -->
+    <nav>
+        <ul>
+            <li class="site-name">Chrono</li>
+            <li><a href="index.html">Início</a></li>
+            <li><a href="educativa.html">Página Educativa</a></li>
+            <li><a href="minijogos.html">Mini Jogos</a></li>
+            <li><a href="perfil.html">Perfil</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="minijogo-header">
+            <h1>Clique Rápido</h1>
+        </div>
+
+        <div class="info-jogo">
+            <p>Teste seus reflexos! Clique no botão o máximo de vezes que puder em 10 segundos. Prepare-se e boa sorte!</p>
+            <a href="#" class="botao-jogar" id="iniciarJogo">Iniciar Jogo</a>
+        </div>
+
+        <div class="cronometro" id="cronometro">10</div>
+        <button id="botaoClique" class="botao-clique" style="display:none;">Clique Aqui!</button>
+
+        <div class="resultado" id="resultadoJogo"></div>
+
+        <a href="minijogos.html" class="botao-voltar">Voltar aos Mini Jogos</a>
+    </div>
+
+    <script>
+        let tempoRestante = 10; // 10 segundos
+        let contadorCliques = 0;
+        let intervalo;
+
+        // Função para iniciar o jogo
+        document.getElementById('iniciarJogo').addEventListener('click', function (e) {
+            e.preventDefault();
+            contadorCliques = 0; // Reinicia o contador
+            document.getElementById('resultadoJogo').textContent = "";
+            document.getElementById('cronometro').textContent = tempoRestante;
+            document.getElementById('botaoClique').style.display = "block"; // Mostra o botão
+            iniciarCronometro();
+        });
+
+        // Função para iniciar o cronômetro
+        function iniciarCronometro() {
+            intervalo = setInterval(() => {
+                tempoRestante--;
+                document.getElementById('cronometro').textContent = tempoRestante;
+
+                if (tempoRestante <= 0) {
+                    clearInterval(intervalo);
+                    document.getElementById('botaoClique').style.display = "none"; // Esconde o botão
+                    document.getElementById('resultadoJogo').textContent = `Você clicou ${contadorCliques} vezes!`;
+                    registrarDesempenho();
+                    tempoRestante = 10; // Reinicia o cronômetro para o próximo jogo
+                }
+            }, 1000); // Atualiza o cronômetro a cada segundo
+        }
+
+        // Função para contar os cliques
+        document.getElementById('botaoClique').addEventListener('click', function () {
+            contadorCliques++;
+        });
+
+        // Função para salvar o desempenho do usuário
+        function registrarDesempenho() {
+            // Salva o número de cliques como desempenho
+            let desempenho = JSON.parse(localStorage.getItem('desempenhoUsuario')) || {};
+            desempenho['Clique Rápido'] = contadorCliques;
+            localStorage.setItem('desempenhoUsuario', JSON.stringify(desempenho));
+
+            // Atualiza o XP total do usuário
+            let xpAtual = parseInt(localStorage.getItem('xpUsuario')) || 0;
+            let novoXP = xpAtual + contadorCliques; // Cada clique vale 1 XP
+            localStorage.setItem('xpUsuario', novoXP);
+        }
+    </script>
+
+</body>
+</html>

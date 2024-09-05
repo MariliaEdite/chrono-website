@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz - Chrono</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #333332;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .minijogo-header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #cdb34a;
+        }
+
+        .info-jogo {
+            text-align: center;
+            margin-bottom: 30px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-jogo p {
+            font-size: 18px;
+            margin: 0;
+        }
+
+        .botao-jogar, .botao-voltar, .botao-reiniciar {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #000;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .botao-jogar:hover, .botao-voltar:hover, .botao-reiniciar:hover {
+            background-color: #555;
+        }
+
+        .resultado {
+            font-size: 18px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .questao {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .opcao {
+            display: block;
+            padding: 10px;
+            background-color: #ffd700;
+            margin: 5px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .opcao:hover {
+            background-color: #f0c000;
+        }
+
+        .opcao-correta {
+            background-color: #00ff00;
+        }
+
+        .opcao-errada {
+            background-color: #ff0000;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            background-color: #000;
+            display: flex;
+            justify-content: left;
+            align-items: center;
+            height: 50px;
+        }
+
+        nav ul li {
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 15px;
+        }
+
+        nav ul li a:hover {
+            background-color: #555;
+        }
+
+        .site-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #cdb34a;
+            margin-right: auto;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Menu padrão com o nome do site -->
+    <nav>
+        <ul>
+            <li class="site-name">Chrono</li>
+            <li><a href="index.html">Início</a></li>
+            <li><a href="educativa.html">Página Educativa</a></li>
+            <li><a href="minijogos.html">Mini Jogos</a></li>
+            <li><a href="perfil.html">Perfil</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="minijogo-header">
+            <h1>Quiz</h1>
+        </div>
+
+        <div class="info-jogo">
+            <p>Responda as perguntas sobre administração do tempo e gestão de tarefas. Cada resposta correta vale pontos!</p>
+            <a href="#" class="botao-jogar" id="iniciarJogo">Iniciar Jogo</a>
+        </div>
+
+        <div id="quizContainer" style="display: none;">
+            <div id="questoesContainer">
+                <!-- Questões serão geradas aqui pelo JavaScript -->
+            </div>
+        </div>
+
+        <div class="resultado" id="resultadoJogo"></div>
+        <a href="minijogos.html" class="botao-voltar">Voltar aos Mini Jogos</a>
+        <a href="#" class="botao-reiniciar" id="reiniciarJogo" style="display: none;">Reiniciar Jogo</a>
+    </div>
+
+    <script>
+        const questoes = [
+            {
+                pergunta: "Qual é a técnica de gestão de tempo que divide o trabalho em intervalos de 25 minutos, seguidos de uma pausa?",
+                respostas: ["Método Pomodoro", "Técnica de Eisenhower", "Método GTD", "Técnica de Time Blocking"],
+                correta: 0
+            },
+            {
+                pergunta: "O que deve ser a prioridade máxima ao planejar suas tarefas diárias?",
+                respostas: ["Tarefas urgentes", "Tarefas importantes", "Tarefas agradáveis", "Tarefas rápidas"],
+                correta: 1
+            },
+            {
+                pergunta: "Qual é a melhor maneira de evitar a procrastinação?",
+                respostas: ["Fazer uma lista de tarefas", "Recompensar-se após terminar uma tarefa", "Definir prazos rígidos", "Dividir as tarefas em partes menores"],
+                correta: 3
+            },
+            {
+                pergunta: "Qual é a técnica que sugere a utilização de um calendário para organizar e alocar seu tempo de forma eficiente?",
+                respostas: ["Time Blocking", "Método Pomodoro", "Método de Revisão", "Técnica de Foco"],
+                correta: 0
+            },
+            {
+                pergunta: "Qual é a principal vantagem de manter um diário de tarefas?",
+                respostas: ["Melhorar a memória", "Reduzir a sobrecarga mental", "Aumentar a produtividade", "Fazer uma lista de contatos"],
+                correta: 1
+            },
+            {
+                pergunta: "Como você pode aumentar sua produtividade ao lidar com tarefas complexas?",
+                respostas: ["Concentrar-se em uma tarefa por vez", "Dividir tarefas complexas em partes menores", "Usar múltiplas ferramentas de produtividade", "Aumentar o tempo de trabalho contínuo"],
+                correta: 1
+            },
+            {
+                pergunta: "Qual é a técnica de planejamento que ajuda a identificar tarefas de alta prioridade e a reduzir o tempo gasto em tarefas menos importantes?",
+                respostas: ["Matriz de Eisenhower", "Método Kanban", "Técnica de Pomodoro", "Método SMART"],
+                correta: 0
+            },
+            {
+                pergunta: "Qual é a melhor forma de lidar com interrupções durante o trabalho?",
+                respostas: ["Ignorar as interrupções", "Desligar notificações e dedicar tempo ininterrupto", "Permitir interrupções e compensar mais tarde", "Reagir imediatamente a todas as interrupções"],
+                correta: 1
+            },
+            {
+                pergunta: "Qual é a vantagem de definir metas SMART para seus projetos?",
+                respostas: ["Aumenta a clareza e a motivação", "Permite menos planejamento", "Facilita a delegação de tarefas", "Reduz o número de tarefas necessárias"],
+                correta: 0
+            },
+            {
+                pergunta: "Como você pode medir a eficácia da sua gestão de tempo?",
+                respostas: ["Registrando o tempo gasto em cada tarefa", "Comparando com o tempo de outros", "Avaliando a satisfação pessoal", "Contando o número de tarefas concluídas"],
+                correta: 0
+            }
+        ];
+
+        let respostaCorretas = 0;
+        let questaoAtual = 0;
+
+        function gerarQuestao() {
+            const questao = questoes[questaoAtual];
+            const questoesContainer = document.getElementById('questoesContainer');
+            questoesContainer.innerHTML = ''; // Limpa o container
+            const questaoElement = document.createElement('div');
+            questaoElement.classList.add('questao');
+
+            const perguntaElement = document.createElement('h2');
+            perguntaElement.textContent = questao.pergunta;
+            questaoElement.appendChild(perguntaElement);
+
+            questao.respostas.forEach((resposta, index) => {
+                const respostaElement = document.createElement('div');
+                respostaElement.textContent = resposta;
+                respostaElement.classList.add('opcao');
+                respostaElement.dataset.index = index;
+                respostaElement.addEventListener('click', verificarResposta);
+                questaoElement.appendChild(respostaElement);
+            });
+
+            questoesContainer.appendChild(questaoElement);
+        }
+
+        function verificarResposta(e) {
+            const respostaSelecionada = e.target;
+            const respostaIndex = parseInt(respostaSelecionada.dataset.index);
+            const questao = questoes[questaoAtual];
+
+            // Remove a classe 'opcao' para que as respostas não possam ser clicadas novamente
+            const opcoes = document.querySelectorAll('.opcao');
+            opcoes.forEach(opcao => opcao.removeEventListener('click', verificarResposta));
+
+            // Verifica se a resposta está correta
+            if (respostaIndex === questao.correta) {
+                respostaSelecionada.classList.add('opcao-correta');
+                respostaCorretas++;
+            } else {
+                respostaSelecionada.classList.add('opcao-errada');
+                // Marca a resposta correta
+                opcoes[questao.correta].classList.add('opcao-correta');
+            }
+
+            // Transição para a próxima pergunta ou fim do jogo
+            setTimeout(() => {
+                questaoAtual++;
+                if (questaoAtual < questoes.length) {
+                    gerarQuestao();
+                } else {
+                    mostrarResultado();
+                }
+            }, 1000); // Transição de 1 segundo
+        }
+
+        function mostrarResultado() {
+            const resultadoElement = document.getElementById('resultadoJogo');
+            resultadoElement.textContent = `Você acertou ${respostaCorretas} de ${questoes.length} perguntas.`;
+            document.getElementById('reiniciarJogo').style.display = 'block';
+
+            // Adiciona XP ao usuário
+            let xpUsuario = localStorage.getItem('xpUsuario') || 0;
+            xpUsuario = parseInt(xpUsuario) + (respostaCorretas * 10); // Cada resposta correta vale 10 XP
+            localStorage.setItem('xpUsuario', xpUsuario);
+
+            // Atualiza o desempenho do quiz
+            let desempenhoQuiz = JSON.parse(localStorage.getItem('desempenhoQuiz')) || { vezesJogado: 0 };
+            desempenhoQuiz.vezesJogado += 1;
+            localStorage.setItem('desempenhoQuiz', JSON.stringify(desempenhoQuiz));
+        }
+
+        document.getElementById('iniciarJogo').addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector('.info-jogo').style.display = 'none';
+            document.getElementById('quizContainer').style.display = 'block';
+            gerarQuestao();
+        });
+
+        document.getElementById('reiniciarJogo').addEventListener('click', function (e) {
+            e.preventDefault();
+            respostaCorretas = 0;
+            questaoAtual = 0;
+            document.getElementById('resultadoJogo').textContent = '';
+            document.getElementById('reiniciarJogo').style.display = 'none';
+            document.querySelector('.info-jogo').style.display = 'block';
+            document.getElementById('quizContainer').style.display = 'none';
+        });
+    </script>
+</body>
+</html>

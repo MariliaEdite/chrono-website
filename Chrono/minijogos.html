@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Jogos - Chrono</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #333332;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            background-color: #000;
+            display: flex;
+            justify-content: left;
+            align-items: center;
+            height: 50px;
+        }
+
+        nav ul li {
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 15px;
+        }
+
+        nav ul li a:hover {
+            background-color: #555;
+        }
+
+        .site-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #cdb34a;
+            margin-right: auto;
+            padding-left: 20px;
+        }
+
+        .hero {
+            background-image: url('chrono.png'); 
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            padding: 60px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            height: 200px; 
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4); /* Cor de sobreposição para aumentar contraste do texto */
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 36px;
+            margin: 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin: 20px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .section p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .jogo {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .jogo h3 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .jogo img {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .jogo img:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Menu padrão com o nome do site -->
+    <nav>
+        <ul>
+            <li class="site-name">Chrono</li>
+            <li><a href="index.html">Início</a></li>
+            <li><a href="educativa.html">Página Educativa</a></li>
+            <li><a href="minijogos.html">Mini Jogos</a></li>
+            <li><a href="perfil.html">Perfil</a></li>
+        </ul>
+    </nav>
+
+    <div class="hero">
+        <h1>Explore Nossos Mini Jogos</h1>
+        <p>Divirta-se enquanto aprende a gerenciar seu tempo com nossos jogos educativos.</p>
+    </div>
+
+    <div class="container">
+        <div class="section">
+            <h2>Jogos Disponíveis</h2>
+
+            <!-- Jogo 1 -->
+            <div class="jogo">
+                <h3>Blocos de Tempo</h3>
+                <p>Desafie-se a organizar seu tempo de forma eficiente e maximize sua produtividade.</p>
+                <a href="blocos_tempo.html">
+                    <img src="1.png" alt="Blocos de Tempo">
+                </a>
+            </div>
+
+            <!-- Jogo 2 -->
+            <div class="jogo">
+                <h3>Prioridade Tarefas</h3>
+                <p>Classifique suas tarefas de acordo com sua importância e urgência.</p>
+                <a href="prioridade_tarefas.html">
+                    <img src="2.png" alt="Prioridade Tarefas">
+                </a>
+            </div>
+
+            <!-- Jogo 3 -->
+            <div class="jogo">
+                <h3>Clique Rápido</h3>
+                <p>Teste sua agilidade e rapidez para completar as tarefas dentro do tempo limite.</p>
+                <a href="cliquerapido.html">
+                    <img src="3.png" alt="Clique Rápido">
+                </a>
+            </div>
+
+            <!-- Jogo 4 -->
+            <div class="jogo">
+                <h3>Gestão de Crises</h3>
+                <p>Gerencie situações imprevistas e mantenha a calma sob pressão.</p>
+                <a href="gestao_crises.html">
+                    <img src="4.png" alt="Gestão de Crises">
+                </a>
+            </div>
+
+            <!-- Jogo 5 -->
+            <div class="jogo">
+                <h3>Quiz sobre Gestão do Tempo</h3>
+                <p>Teste seus conhecimentos sobre técnicas e estratégias de gestão do tempo.</p>
+                <a href="quiz.html">
+                    <img src="5.png" alt="Quiz sobre Gestão do Tempo">
+                </a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

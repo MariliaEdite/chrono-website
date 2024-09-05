@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafio Pomodoro - Chrono</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilos específicos para a página de minijogo */
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .minijogo-header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #cdb34a;
+        }
+
+        .info-jogo {
+            text-align: center;
+            margin-bottom: 30px;
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .info-jogo p {
+            font-size: 18px;
+        }
+
+        .botao-jogar {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #000;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .botao-jogar:hover {
+            background-color: #555;
+        }
+
+        .resultado {
+            font-size: 18px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .cronometro {
+            font-size: 32px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Estilo para o menu */
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            background-color: #000;
+            display: flex;
+            justify-content: left;
+            align-items: center;
+            height: 50px;
+        }
+
+        nav ul li {
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 15px;
+        }
+
+        nav ul li a:hover {
+            background-color: #555;
+        }
+
+        /* Estilo para o nome do site */
+        .site-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #cdb34a;
+            margin-right: auto;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Menu padrão com o nome do site -->
+    <nav>
+        <ul>
+            <li class="site-name">Chrono</li>
+            <li><a href="index.html">Início</a></li>
+            <li><a href="educativa.html">Página Educativa</a></li>
+            <li><a href="minijogos.html">Mini Jogos</a></li>
+            <li><a href="perfil.html">Perfil</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="minijogo-header">
+            <h1>Desafio Pomodoro</h1>
+        </div>
+
+        <div class="info-jogo">
+            <p>Desafie-se a usar a técnica Pomodoro para melhorar sua produtividade. Trabalhe por 25 minutos e descanse por 5 minutos. Complete quantos ciclos conseguir!</p>
+            <a href="#" class="botao-jogar" id="iniciarPomodoro">Iniciar Jogo</a>
+        </div>
+
+        <div class="cronometro" id="cronometro">25:00</div>
+
+        <div class="resultado" id="resultadoJogo"></div>
+
+        <a href="minijogos.html" class="botao-jogar">Voltar aos Mini Jogos</a>
+    </div>
+
+    <script>
+        let tempoRestante = 1500; // 25 minutos em segundos
+        let intervalo;
+
+        // Função para formatar o tempo (minutos:segundos)
+        function formatarTempo(segundos) {
+            const minutos = Math.floor(segundos / 60);
+            const segundosRestantes = segundos % 60;
+            return `${minutos < 10 ? '0' : ''}${minutos}:${segundosRestantes < 10 ? '0' : ''}${segundosRestantes}`;
+        }
+
+        // Função para iniciar o cronômetro
+        function iniciarCronometro() {
+            intervalo = setInterval(() => {
+                tempoRestante--;
+                document.getElementById('cronometro').textContent = formatarTempo(tempoRestante);
+
+                if (tempoRestante <= 0) {
+                    clearInterval(intervalo);
+                    document.getElementById('resultadoJogo').textContent = "Ciclo completo! Hora de descansar.";
+                    registrarDesempenho();
+                }
+            }, 1000); // Atualiza o cronômetro a cada segundo
+        }
+
+        // Função para simular o início do jogo Pomodoro
+        document.getElementById('iniciarPomodoro').addEventListener('click', function (e) {
+            e.preventDefault();
+            document.getElementById('resultadoJogo').textContent = "";
+            tempoRestante = 1500; // Reinicia o tempo para 25 minutos
+            document.getElementById('cronometro').textContent = formatarTempo(tempoRestante);
+            iniciarCronometro();
+        });
+
+        // Função para salvar o desempenho do usuário
+        function registrarDesempenho() {
+            // Simulação de desempenho (1 ciclo completo)
+            let ciclosCompletos = 1;
+            let desempenho = JSON.parse(localStorage.getItem('desempenhoUsuario')) || {};
+            desempenho['Desafio Pomodoro'] = (desempenho['Desafio Pomodoro'] || 0) + ciclosCompletos;
+            localStorage.setItem('desempenhoUsuario', JSON.stringify(desempenho));
+
+            // Atualizar o XP total do usuário
+            let xpAtual = parseInt(localStorage.getItem('xpUsuario')) || 0;
+            let novoXP = xpAtual + (ciclosCompletos * 10); // Cada ciclo vale 10 XP
+            localStorage.setItem('xpUsuario', novoXP);
+        }
+    </script>
+
+</body>
+</html>

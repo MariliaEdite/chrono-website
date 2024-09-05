@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prioridade Tarefas - Chrono</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #333332;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .minijogo-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .info-jogo {
+            text-align: center;
+            margin-bottom: 30px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .botao-jogar, .botao-voltar, .botao-reiniciar {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #000;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .botao-jogar:hover, .botao-voltar:hover, .botao-reiniciar:hover {
+            background-color: #555;
+        }
+
+        .resultado {
+            font-size: 18px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .caixa-tarefa {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        .caixa-tarefa.arrastada {
+            background-color: #ffd700;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            background-color: #000;
+            display: flex;
+            justify-content: left;
+            align-items: center;
+            height: 50px;
+        }
+
+        nav ul li {
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 15px;
+        }
+
+        nav ul li a:hover {
+            background-color: #555;
+        }
+
+        .site-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd700;
+            margin-right: auto;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Menu padrão com o nome do site -->
+    <nav>
+        <ul>
+            <li class="site-name">Chrono</li>
+            <li><a href="index.html">Início</a></li>
+            <li><a href="educativa.html">Página Educativa</a></li>
+            <li><a href="minijogos.html">Mini Jogos</a></li>
+            <li><a href="perfil.html">Perfil</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="minijogo-header">
+            <h1>Prioridade Tarefas</h1>
+        </div>
+
+        <div class="info-jogo">
+            <p>Arraste as tarefas para as caixas de prioridade. Complete a atividade para ver seu desempenho!</p>
+            <a href="#" class="botao-jogar" id="iniciarJogo">Iniciar Jogo</a>
+        </div>
+
+        <div id="jogoContainer" style="display: none;">
+            <div id="tarefasContainer">
+                <!-- Tarefas serão geradas aqui pelo JavaScript -->
+            </div>
+            <div id="caixasContainer">
+                <div class="caixa-tarefa" id="caixa1" data-prioridade="1">Prioridade 1</div>
+                <div class="caixa-tarefa" id="caixa2" data-prioridade="2">Prioridade 2</div>
+                <div class="caixa-tarefa" id="caixa3" data-prioridade="3">Prioridade 3</div>
+                <div class="caixa-tarefa" id="caixa4" data-prioridade="4">Prioridade 4</div>
+                <div class="caixa-tarefa" id="caixa5" data-prioridade="5">Prioridade 5</div>
+            </div>
+        </div>
+
+        <div class="resultado" id="resultadoJogo"></div>
+        <a href="minijogos.html" class="botao-voltar">Voltar aos Mini Jogos</a>
+        <a href="#" class="botao-reiniciar" id="reiniciarJogo" style="display: none;">Reiniciar Jogo</a>
+    </div>
+
+    <script>
+        let tarefas = [];
+        let tarefasCorretas = 0;
+
+        function gerarTarefas() {
+            tarefas = [
+                { nome: "Tarefa 1 - Alta Prioridade", prioridade: 1 },
+                { nome: "Tarefa 2 - Média Prioridade", prioridade: 3 },
+                { nome: "Tarefa 3 - Baixa Prioridade", prioridade: 5 },
+                { nome: "Tarefa 4 - Média Prioridade", prioridade: 2 },
+                { nome: "Tarefa 5 - Alta Prioridade", prioridade: 1 },
+                { nome: "Tarefa 6 - Baixa Prioridade", prioridade: 4 }
+            ];
+
+            const tarefasContainer = document.getElementById('tarefasContainer');
+            tarefasContainer.innerHTML = ''; // Limpa o container
+
+            tarefas.forEach((tarefa, index) => {
+                const tarefaElement = document.createElement('div');
+                tarefaElement.classList.add('caixa-tarefa');
+                tarefaElement.textContent = tarefa.nome;
+                tarefaElement.draggable = true;
+                tarefaElement.dataset.index = index;
+                tarefaElement.addEventListener('dragstart', arrastarTarefa);
+                tarefasContainer.appendChild(tarefaElement);
+            });
+        }
+
+        function arrastarTarefa(e) {
+            e.dataTransfer.setData('text/plain', e.target.dataset.index);
+        }
+
+        function permitirArrasto(e) {
+            e.preventDefault();
+        }
+
+        function soltarTarefa(e) {
+            e.preventDefault();
+            const tarefaIndex = e.dataTransfer.getData('text/plain');
+            const tarefa = tarefas[tarefaIndex];
+            const prioridade = parseInt(e.target.dataset.prioridade);
+
+            if (tarefa.prioridade === prioridade) {
+                e.target.classList.add('arrastada');
+                tarefasCorretas++;
+            }
+
+            if (tarefasCorretas === tarefas.length) {
+                mostrarResultado();
+            }
+        }
+
+        function mostrarResultado() {
+            const resultadoElement = document.getElementById('resultadoJogo');
+            resultadoElement.textContent = `Você acertou ${tarefasCorretas} de ${tarefas.length} tarefas.`;
+            document.getElementById('reiniciarJogo').style.display = 'block';
+
+            // Adiciona XP ao usuário
+            let xpUsuario = localStorage.getItem('xpUsuario') || 0;
+            xpUsuario = parseInt(xpUsuario) + (tarefasCorretas * 10); // Cada tarefa correta vale 10 XP
+            localStorage.setItem('xpUsuario', xpUsuario);
+
+            // Atualiza o número de vezes jogado
+            let vezesJogado = localStorage.getItem('prioridadeTarefas') || 0;
+            vezesJogado = parseInt(vezesJogado) + 1;
+            localStorage.setItem('prioridadeTarefas', vezesJogado);
+        }
+
+        document.getElementById('iniciarJogo').addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector('.info-jogo').style.display = 'none';
+            document.getElementById('jogoContainer').style.display = 'block';
+            gerarTarefas();
+
+            const caixas = document.querySelectorAll('.caixa-tarefa[data-prioridade]');
+            caixas.forEach(caixa => {
+                caixa.addEventListener('dragover', permitirArrasto);
+                caixa.addEventListener('drop', soltarTarefa);
+            });
+        });
+
+        document.getElementById('reiniciarJogo').addEventListener('click', function (e) {
+            e.preventDefault();
+            tarefasCorretas = 0;
+            document.getElementById('resultadoJogo').textContent = '';
+            document.getElementById('reiniciarJogo').style.display = 'none';
+            document.querySelector('.info-jogo').style.display = 'block';
+            document.getElementById('jogoContainer').style.display = 'none';
+        });
+    </script>
+</body>
+</html>

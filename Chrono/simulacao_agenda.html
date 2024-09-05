@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulação de Agenda - Chrono</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Adicione o estilo necessário aqui, se necessário */
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li class="site-name">Chrono</li>
+                <li><a href="index.html">Início</a></li>
+                <li><a href="educativo.html">Importância da Administração do Tempo</a></li>
+                <li><a href="perfil.html">Perfil</a></li>
+                <li><a href="minijogos.html">Mini Jogos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="content">
+        <h1>Simulação de Agenda</h1>
+        <p>Simule a criação de uma agenda e registre seu tempo!</p>
+        <button id="iniciarAgenda" onclick="iniciarAgenda()">Iniciar Simulação</button>
+        <div id="mensagemResultado"></div>
+        <a href="minijogos.html" class="botao-voltar">Voltar para Mini Jogos</a>
+    </div>
+
+    <script>
+        let tempoInicioAgenda;
+        let agendaEmAndamento = false;
+
+        function iniciarAgenda() {
+            if (agendaEmAndamento) return;
+
+            agendaEmAndamento = true;
+            document.getElementById('mensagemResultado').textContent = '';
+            const botao = document.getElementById('iniciarAgenda');
+            botao.textContent = 'Simulação em andamento...';
+
+            // Define um tempo fixo de 15 minutos para a simulação de agenda
+            const duracaoAgenda = 15 * 60 * 1000; // 15 minutos em milissegundos
+
+            tempoInicioAgenda = Date.now();
+
+            setTimeout(() => {
+                agendaEmAndamento = false;
+                botao.textContent = 'Simulação Concluída!';
+                const tempoTotal = (Date.now() - tempoInicioAgenda) / 1000; // Converte para segundos
+                document.getElementById('mensagemResultado').textContent = `Você completou a simulação em ${tempoTotal.toFixed(2)} segundos.`;
+                atualizarDesempenho('Simulação de Agenda', tempoTotal.toFixed(2));
+            }, duracaoAgenda);
+        }
+
+        function atualizarDesempenho(nomeJogo, pontos) {
+            let desempenho = JSON.parse(localStorage.getItem('desempenhoUsuario')) || {};
+            desempenho[nomeJogo] = pontos;
+            localStorage.setItem('desempenhoUsuario', JSON.stringify(desempenho));
+        }
+        function adicionarXP(xpGanho) {
+            let xpTotal = parseInt(localStorage.getItem('xpUsuario')) || 0; // Pega o XP atual do usuário ou começa com 0
+            xpTotal += xpGanho; // Adiciona os pontos de XP ganhos
+            localStorage.setItem('xpUsuario', xpTotal); // Salva o XP atualizado
+        }
+
+    </script>
+</body>
+</html>

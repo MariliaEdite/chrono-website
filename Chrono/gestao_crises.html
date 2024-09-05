@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Crises - Chrono</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilos principais */
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .minijogo-header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #cdb34a;
+        }
+
+        .info-jogo {
+            text-align: center;
+            margin-bottom: 30px;
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .info-jogo p {
+            font-size: 18px;
+            margin: 0;
+        }
+
+        .botao-jogar, .botao-voltar {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #000;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .botao-jogar:hover, .botao-voltar:hover {
+            background-color: #555;
+        }
+
+        .resultado {
+            font-size: 18px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .questao {
+            font-size: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .resposta {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            background-color: #d8b83a;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .resposta:hover {
+            background-color: #b89b2d;
+        }
+
+        /* Estilo para o menu */
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            background-color: #000;
+            display: flex;
+            justify-content: left;
+            align-items: center;
+            height: 50px;
+        }
+
+        nav ul li {
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 15px;
+        }
+
+        nav ul li a:hover {
+            background-color: #555;
+        }
+
+        /* Estilo para o nome do site */
+        .site-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #cdb34a;
+            margin-right: auto;
+            padding-left: 20px;
+        }
+
+        /* Transição para as perguntas */
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .fade-in {
+            opacity: 1;
+            transition: opacity 0.5s ease-in;
+        }
+
+        #jogoContainer {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Menu padrão com o nome do site -->
+    <nav>
+        <ul>
+            <li class="site-name">Chrono</li>
+            <li><a href="index.html">Início</a></li>
+            <li><a href="educativa.html">Página Educativa</a></li>
+            <li><a href="minijogos.html">Mini Jogos</a></li>
+            <li><a href="perfil.html">Perfil</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="minijogo-header">
+            <h1>Gestão de Crises</h1>
+        </div>
+
+        <div class="info-jogo">
+            <p>Teste suas habilidades de gestão de crises. Responda corretamente às questões e gerencie os recursos da melhor forma possível para resolver os problemas.</p>
+            <a href="#" class="botao-jogar" id="iniciarJogo">Iniciar Jogo</a>
+        </div>
+
+        <div id="jogoContainer" class="fade-out">
+            <div class="questao" id="questao"></div>
+            <button class="resposta" id="resposta1"></button>
+            <button class="resposta" id="resposta2"></button>
+            <button class="resposta" id="resposta3"></button>
+            <button class="resposta" id="resposta4"></button>
+            <div class="resultado" id="resultadoJogo"></div>
+        </div>
+
+        <a href="minijogos.html" class="botao-voltar">Voltar aos Mini Jogos</a>
+    </div>
+
+    <script>
+        const perguntas = [
+            { pergunta: "Qual a melhor forma de lidar com uma crise financeira?", respostas: ["Reduzir gastos", "Aumentar a dívida", "Ignorar", "Investir em novos projetos"], correta: 0 },
+            { pergunta: "Como priorizar tarefas em um ambiente de crise?", respostas: ["Focar em tarefas urgentes", "Deixar tudo para depois", "Aumentar a carga de trabalho", "Dividir as tarefas em menor número"], correta: 0 },
+            { pergunta: "Qual a melhor estratégia para comunicação em uma crise?", respostas: ["Ser transparente", "Ocultar informações", "Esperar que a crise passe", "Repreender a equipe"], correta: 0 },
+            { pergunta: "Como garantir a moral da equipe durante uma crise?", respostas: ["Manter a comunicação constante", "Aumentar a carga de trabalho", "Reduzir salários", "Evitar feedback"], correta: 0 },
+            { pergunta: "Qual é a melhor maneira de avaliar a situação durante uma crise?", respostas: ["Analisar os dados disponíveis", "Ignorar a análise", "Esperar uma solução externa", "Depender apenas da intuição"], correta: 0 },
+            { pergunta: "Como deve ser a alocação de recursos em uma crise?", respostas: ["Priorizar os recursos mais críticos", "Distribuir recursos igualmente", "Investir em novos projetos", "Manter os recursos inalterados"], correta: 0 },
+            { pergunta: "Qual é o principal objetivo em uma gestão de crises?", respostas: ["Resolver a crise de forma eficiente", "Minimizar o impacto e recuperar-se rapidamente", "Reagir apenas quando necessário", "Delegar a responsabilidade para outros"], correta: 1 },
+            { pergunta: "Como deve ser a abordagem para um cliente insatisfeito em uma crise?", respostas: ["Ouvir e resolver o problema", "Ignorar as queixas", "Oferecer descontos", "Prometer mudanças futuras"], correta: 0 },
+            { pergunta: "Qual a importância da documentação durante uma crise?", respostas: ["É fundamental para análise e aprendizado futuro", "Não é importante", "Pode ser feita depois da crise", "Só é necessária para questões legais"], correta: 0 },
+            { pergunta: "Como deve ser a postura de um líder durante uma crise?", respostas: ["Manter a calma e liderar pelo exemplo", "Se esconder", "Aumentar a pressão sobre a equipe", "Deixar a equipe decidir o rumo"], correta: 0 }
+        ];
+
+        let perguntaAtual = 0;
+        let acertos = 0;
+        let erros = 0;
+
+        // Função para carregar uma pergunta
+        function carregarPergunta() {
+            const pergunta = perguntas[perguntaAtual];
+            document.getElementById('questao').textContent = pergunta.pergunta;
+            document.getElementById('resposta1').textContent = pergunta.respostas[0];
+            document.getElementById('resposta2').textContent = pergunta.respostas[1];
+            document.getElementById('resposta3').textContent = pergunta.respostas[2];
+            document.getElementById('resposta4').textContent = pergunta.respostas[3];
+        }
+
+        // Função para verificar a resposta
+        function verificarResposta(index) {
+            const pergunta = perguntas[perguntaAtual];
+            if (index === pergunta.correta) {
+                acertos++;
+            } else {
+                erros++;
+            }
+            perguntaAtual++;
+            if (perguntaAtual < perguntas.length) {
+                carregarPergunta();
+            } else {
+                mostrarResultado();
+            }
+        }
+
+        // Função para mostrar o resultado
+        function mostrarResultado() {
+            document.getElementById('jogoContainer').classList.remove('fade-in');
+            document.getElementById('jogoContainer').classList.add('fade-out');
+            setTimeout(() => {
+                document.getElementById('jogoContainer').style.display = 'none';
+                document.getElementById('resultadoJogo').textContent = `Você acertou ${acertos} e errou ${erros} questões!`;
+                registrarDesempenho();
+            }, 500); // Tempo da transição
+        }
+
+        // Função para iniciar o jogo
+        document.getElementById('iniciarJogo').addEventListener('click', () => {
+            document.querySelector('.info-jogo').style.display = 'none';
+            document.getElementById('jogoContainer').style.display = 'block';
+            document.getElementById('jogoContainer').classList.remove('fade-out');
+            document.getElementById('jogoContainer').classList.add('fade-in');
+            carregarPergunta();
+        });
+
+        // Adicionar eventos para respostas
+        document.getElementById('resposta1').addEventListener('click', () => verificarResposta(0));
+        document.getElementById('resposta2').addEventListener('click', () => verificarResposta(1));
+        document.getElementById('resposta3').addEventListener('click', () => verificarResposta(2));
+        document.getElementById('resposta4').addEventListener('click', () => verificarResposta(3));
+
+        // Função para registrar desempenho
+        function registrarDesempenho() {
+            // Lógica para registrar desempenho pode ser adicionada aqui
+            console.log(`Desempenho registrado: Acertos: ${acertos}, Erros: ${erros}`);
+        }
+    </script>
+</body>
+</html>

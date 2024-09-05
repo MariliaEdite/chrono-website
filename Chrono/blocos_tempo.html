@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blocos de Tempo - Chrono</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #333332;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            background-color: #000;
+            display: flex;
+            justify-content: left;
+            align-items: center;
+            height: 50px;
+        }
+
+        nav ul li {
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 15px;
+        }
+
+        nav ul li a:hover {
+            background-color: #555;
+        }
+
+        .site-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #cdb34a;
+            margin-right: auto;
+            padding-left: 20px;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .minijogo-header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #cdb34a;
+        }
+
+        .info-jogo {
+            text-align: center;
+            margin-bottom: 30px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-jogo p {
+            font-size: 18px;
+            margin: 0;
+        }
+
+        .botao-jogar, .botao-voltar, .botao-reiniciar {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #000;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .botao-jogar:hover, .botao-voltar:hover, .botao-reiniciar:hover {
+            background-color: #555;
+        }
+
+        .resultado {
+            font-size: 18px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .cronometro {
+            font-size: 24px;
+            text-align: center;
+            margin-top: 20px;
+            color: #ffffff;
+        }
+
+        .bloco-tempo {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .bloco {
+            width: 60px;
+            height: 60px;
+            margin: 10px;
+            background-color: #ffd700;
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .bloco:hover {
+            background-color: #f0c000;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Menu padrão com o nome do site -->
+    <nav>
+        <ul>
+            <li class="site-name">Chrono</li>
+            <li><a href="index.html">Início</a></li>
+            <li><a href="educativa.html">Página Educativa</a></li>
+            <li><a href="minijogos.html">Mini Jogos</a></li>
+            <li><a href="perfil.html">Perfil</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="minijogo-header">
+            <h1>Blocos de Tempo</h1>
+        </div>
+
+        <div class="info-jogo">
+            <p>Organize os blocos na ordem correta antes que o tempo acabe. Clique nos blocos para ordená-los.</p>
+            <a href="#" class="botao-jogar" id="iniciarJogo">Iniciar Jogo</a>
+        </div>
+
+        <div class="cronometro" id="cronometro">00:50</div>
+
+        <div id="blocosContainer" style="display: none;">
+            <div class="bloco-tempo">
+                <!-- Blocos de tempo gerados  pelo JavaScript -->
+            </div>
+        </div>
+
+        <div class="resultado" id="resultadoJogo"></div>
+        <a href="minijogos.html" class="botao-voltar">Voltar aos Mini Jogos</a>
+        <a href="#" class="botao-reiniciar" id="reiniciarJogo" style="display: none;">Reiniciar Jogo</a>
+    </div>
+
+    <script>
+        const blocos = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // Blocos de tempo a serem ordenados
+        let blocosOrdenados;
+        let tempoRestante = 50; // Tempo em segundos
+        let tempoId;
+        let acertos = 0;
+        let ordemEsperada = 1;
+        let erroDetectado = false;
+
+        function iniciarCronometro() {
+            const cronometroElement = document.getElementById('cronometro');
+            tempoId = setInterval(() => {
+                if (tempoRestante <= 0) {
+                    clearInterval(tempoId);
+                    finalizarJogo(false); // Passa false para indicar que o tempo acabou
+                    return;
+                }
+                tempoRestante--;
+                let minutos = Math.floor(tempoRestante / 60);
+                let segundos = tempoRestante % 60;
+                cronometroElement.textContent = `${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function gerarBlocos() {
+            blocosOrdenados = [...blocos].sort(() => Math.random() - 0.5); // Embaralha blocos
+            const container = document.querySelector('.bloco-tempo');
+            container.innerHTML = ''; // Limpa o container
+            blocosOrdenados.forEach((bloco) => {
+                const blocoElement = document.createElement('div');
+                blocoElement.textContent = bloco;
+                blocoElement.classList.add('bloco');
+                blocoElement.dataset.valor = bloco;
+                blocoElement.addEventListener('click', () => verificarBloco(blocoElement, bloco));
+                container.appendChild(blocoElement);
+            });
+        }
+
+        function verificarBloco(elemento, valorBloco) {
+            if (parseInt(valorBloco) === ordemEsperada) {
+                acertos++;
+                ordemEsperada++;
+                elemento.style.backgroundColor = '#00ff00'; // Verde para acerto
+                setTimeout(() => {
+                    elemento.style.display = 'none'; // Remove o bloco
+                    if (document.querySelectorAll('.bloco').length === 0) {
+                        finalizarJogo(true); // Passa true para indicar que o jogo foi completado
+                    }
+                }, 500);
+            } else {
+                elemento.style.backgroundColor = '#ff0000'; // Vermelho para erro
+                erroDetectado = true;
+                clearInterval(tempoId); // Para o cronômetro
+                setTimeout(() => {
+                    document.getElementById('resultadoJogo').textContent = 'Você errou! O jogo foi interrompido.';
+                    document.getElementById('blocosContainer').style.display = 'none';
+                    document.getElementById('reiniciarJogo').style.display = 'inline-block'; // Mostra o botão de reiniciar
+                }, 500);
+            }
+        }
+
+        function finalizarJogo(completado) {
+            if (!erroDetectado) {
+                document.getElementById('blocosContainer').style.display = 'none';
+                if (completado) {
+                    document.getElementById('resultadoJogo').textContent = `Parabéns! Você acertou ${acertos} blocos.`;
+                } else {
+                    document.getElementById('resultadoJogo').textContent = `Tempo esgotado. Você acertou ${acertos} blocos.`;
+                }
+                registrarDesempenho();
+            }
+        }
+
+        function registrarDesempenho() {
+            // Salva o número de acertos como desempenho
+            let desempenho = JSON.parse(localStorage.getItem('desempenhoUsuario')) || {};
+            desempenho['Blocos de Tempo'] = (desempenho['Blocos de Tempo'] || 0) + 1;
+            localStorage.setItem('desempenhoUsuario', JSON.stringify(desempenho));
+
+            // Atualiza o XP total do usuário
+            let xpAtual = parseInt(localStorage.getItem('xpUsuario')) || 0;
+            let novoXP = xpAtual + acertos * 10; // Cada acerto vale 10 XP
+            localStorage.setItem('xpUsuario', novoXP);
+        }
+
+        document.getElementById('iniciarJogo').addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector('.info-jogo').style.display = 'none';
+            document.getElementById('blocosContainer').style.display = 'flex';
+            iniciarCronometro();
+            gerarBlocos();
+        });
+
+        document.getElementById('reiniciarJogo').addEventListener('click', function (e) {
+            e.preventDefault();
+            tempoRestante = 50;
+            ordemEsperada = 1;
+            acertos = 0;
+            erroDetectado = false;
+            document.getElementById('resultadoJogo').textContent = '';
+            document.getElementById('reiniciarJogo').style.display = 'none';
+            document.querySelector('.info-jogo').style.display = 'block';
+            document.getElementById('blocosContainer').style.display = 'none';
+            document.getElementById('cronometro').textContent = '00:50';
+        });
+    </script>
+
+</body>
+</html>
